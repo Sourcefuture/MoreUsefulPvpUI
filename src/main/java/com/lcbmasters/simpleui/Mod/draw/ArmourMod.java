@@ -49,8 +49,10 @@ public class ArmourMod extends Mod {
 
         for (ItemStack inventory : Minecraft.getMinecraft().thePlayer.getInventory()) {
             try {
-                int percentDurability = (int) ((double) (inventory.getMaxDamage() - inventory.getItemDamage()) / (double) inventory.getMaxDamage() * 100);
-                this.renderPercentWithColorForArmour(percentDurability, x, y);
+                if (!(inventory.getMaxDamage() == 0)) {
+                    int percentDurability = (int) ((double) (inventory.getMaxDamage() - inventory.getItemDamage()) / (double) inventory.getMaxDamage() * 100);
+                    this.renderPercentWithColorForArmour(percentDurability, x, y);
+                }
                 this.renderItem(inventory, x, y, 0, 0);
 
                 y -= 20;
