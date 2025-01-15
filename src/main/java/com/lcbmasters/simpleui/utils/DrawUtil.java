@@ -2,20 +2,92 @@ package com.lcbmasters.simpleui.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.math.BigDecimal;
 
 public class DrawUtil {
-    public static void drawRect(int x, int y, int width, int height, int color) {
-        Gui.drawRect(x, y, x + width, y + height, color);
+    public static void renderBox(int x, int y, int width, int height, int color) {
+        drawRect(x + 1, y, x + width - 1, y + height, color);
+        drawRect(x, y + 1, x + 1, y + height - 1, color);
+        drawRect(x + width - 1, y + 1, x + width, y + height - 1, color);
+        drawRect(x + 1, y + 1, x + width - 1, y + 2, color);
+        drawRect(x + 1, y + height - 2, x + width - 1, y + height - 1, color);
+        drawRect(x + 1, y + 2, x + 2, y + height - 2, color);
+        drawRect(x + width - 2, y + 2, x + width - 1, y + height - 2, color);
     }
+
+    public static int colorRGB(int r, int g, int b) {
+        return colorARGB(255, r, g, b);
+    }
+
+    public static int colorARGB(int a, int r, int g, int b) {
+        return (a & 0xFF) << 24 | (r & 0xFF) << 16 | (g & 0xFF) << 8 | b & 0xFF;
+    }
+
+    public static void renderItem(ItemStack item, int x, int y, int xSkewing, int ySkewing) {
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        RenderHelper.enableGUIStandardItemLighting();
+
+        GlStateManager.enableBlend();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.pushMatrix();
+
+        // 渲染物品
+        Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(item, x, y);
+        Minecraft.getMinecraft().getRenderItem().renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRendererObj, item, x + xSkewing, y + ySkewing, null);
+        // 恢复渲染状态
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.disableBlend();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.popMatrix();
+
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.disableBlend();
+    }
+
+//    public static void drawRect(int x, int y, int width, int height, int color) {
+//        Gui.drawRect(x, y, x + width, y + height, color);
+//    }
+    public static void drawRect(int left, int top, int right, int bottom, int color) {
+        if (left < right) {
+            int j1 = left;
+            left = right;
+            right = j1;
+        }
+        if (top < bottom) {
+            int j1 = top;
+            top = bottom;
+            bottom = j1;
+        }
+        float f3 = (color >> 24 & 0xFF) / 255.0F;
+        float f = (color >> 16 & 0xFF) / 255.0F;
+        float f1 = (color >> 8 & 0xFF) / 255.0F;
+        float f2 = (color & 0xFF) / 255.0F;
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        GL11.glEnable(3042);
+        GL11.glDisable(3553);
+        GL11.glColor4f(f, f1, f2, f3);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(left, bottom, 0.0D).endVertex();
+        worldrenderer.pos(right, bottom, 0.0D).endVertex();
+        worldrenderer.pos(right, top, 0.0D).endVertex();
+        worldrenderer.pos(left, top, 0.0D).endVertex();
+        tessellator.draw();
+        GL11.glEnable(3553);
+    }
+
+
 
     public long bytesToMb(long bytes) {
         return bytes / 1024L / 1024L;
@@ -29,7 +101,7 @@ public class DrawUtil {
     public void drawTextLowerRight(String text, float x, float y, int color, int lineNumber) {
         FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
         DataProcessing dataProcessing = new DataProcessing();
-        font.drawStringWithShadow(text, dataProcessing.getWidth() - x - 1, dataProcessing.getHeight() - y - font.FONT_HEIGHT * lineNumber - 2, color);
+        font.drawStringWithShadow(text, dataProcessing.getWidth() - x - 1, dataProcessing.getHeight() - y - font.FONT_HEIGHT * lineNumber - 1, color);
     }
 
     public static float getStringWidth(String text) {

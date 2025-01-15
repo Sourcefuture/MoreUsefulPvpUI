@@ -29,7 +29,6 @@ public class SpeedMod extends Mod {
             // 获取 timerSpeed 属性的值
             return timerSpeedField.getFloat(timer);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
             return 0.0f; // 返回默认值或者适当的错误处理
         }
     }

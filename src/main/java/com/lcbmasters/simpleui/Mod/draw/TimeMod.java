@@ -39,8 +39,8 @@ public class TimeMod extends Mod {
         String time2 = hour + ":" + minute;
         //Get Time End
 
-        drawUtil.drawTextLowerRight("Time ", DrawUtil.getStringWidth("Time " + time1 + "  " + time2), 0, new Color(62, 255, 255).getRGB(), 1);
-        drawUtil.drawTextLowerRight(time2 + " " + time1, DrawUtil.getStringWidth(time1 + "  " + time2), 0, new Color(255, 255, 255).getRGB(), 1);
+        drawUtil.drawTextLowerRight("Time ", DrawUtil.getStringWidth("Time " + time1 + " " + time2), 0, new Color(62, 255, 255).getRGB(), 1);
+        drawUtil.drawTextLowerRight(time2 + " " + time1, DrawUtil.getStringWidth(time1 + " " + time2), 0, new Color(255, 255, 255).getRGB(), 1);
 
     }
 }

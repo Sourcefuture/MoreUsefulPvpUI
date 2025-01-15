@@ -29,10 +29,12 @@ public class ModManager {
         //Render
         mods.add(new ArmourMod());
         mods.add(new BiomeMod());
+        mods.add(new BlockMod());
         mods.add(new ComboDisplayMod());
         mods.add(new CpsMod());
         mods.add(new DirectionMod());
         mods.add(new EffectMod());
+        mods.add(new InventoryMod());
         mods.add(new FpsMod());
         mods.add(new MemoryMod());
         mods.add(new ReachDisplayMod());
